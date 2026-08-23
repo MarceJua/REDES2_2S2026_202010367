@@ -5,56 +5,6 @@
 
 ---
 
-## 🟢 FASE 1: Diseño de Red y Direccionamiento IP
-
-### 1.1 Esquema de Direccionamiento para VLANs (VLSM)
-
-Red base asignada: `192.188.67.0/24`. Se dividió en 5 subredes `/27` para alojar hasta 30 hosts cada una. La primera IP utilizable de cada subred se reserva para el Default Gateway (SVI).
-
-| VLAN        | Departamento | Edificio       | Dirección de Red | Máscara         | Rango Utilizable      | Gateway (SVI)  |
-| :---------- | :----------- | :------------- | :--------------- | :-------------- | :-------------------- | :------------- |
-| **VLAN 10** | Naranja      | Izquierdo      | 192.188.67.0     | 255.255.255.224 | 192.188.67.1 - .30    | 192.188.67.1   |
-| **VLAN 20** | Verde        | Izquierdo      | 192.188.67.32    | 255.255.255.224 | 192.188.67.33 - .62   | 192.188.67.33  |
-| **VLAN 30** | Naranja      | Derecho        | 192.188.67.64    | 255.255.255.224 | 192.188.67.65 - .94   | 192.188.67.65  |
-| **VLAN 40** | Verde        | Derecho        | 192.188.67.96    | 255.255.255.224 | 192.188.67.97 - .126  | 192.188.67.97  |
-| **VLAN 99** | ADMIN        | Administración | 192.188.67.128   | 255.255.255.224 | 192.188.67.129 - .158 | 192.188.67.129 |
-
-> 📄 **Evidencia:** [Enlace al PDF del cálculo VLSM](./src/reporte_VLSM_192.188.67.0_160826033520.pdf)
-
-### 1.2 Esquema de Direccionamiento para Enlaces (FLSM)
-
-Red base asignada: `10.4.67.0/24`. Se dividió en subredes `/30` para optimizar los enlaces punto a punto de fibra óptica y servidores DHCP.
-
-| ID Enlace    | Conexión (Origen -> Destino) | Dirección de Red | IP Extremo A | IP Extremo B |
-| :----------- | :--------------------------- | :--------------- | :----------- | :----------- |
-| **Enlace 1** | MS1 (Core) -> MS7 (Izq)      | 10.4.67.4/30     | 10.4.67.5    | 10.4.67.6    |
-| **Enlace 2** | MS1 (Core) -> MS2 (Der)      | 10.4.67.8/30     | 10.4.67.9    | 10.4.67.10   |
-| **Enlace 3** | MS7 (Izq) -> MS6 (Admin)     | 10.4.67.20/30    | 10.4.67.22   | 10.4.67.21   |
-| **Enlace 4** | MS2 (Der) -> MS6 (Admin)     | 10.4.67.24/30    | 10.4.67.26   | 10.4.67.25   |
-| **DHCP 1**   | MS1 -> DHCP1 (Server Izq)    | 10.4.67.12/30    | 10.4.67.13   | 10.4.67.14   |
-| **DHCP 2**   | MS1 -> DHCP2 (Server Der)    | 10.4.67.16/30    | 10.4.67.17   | 10.4.67.18   |
-
-> 📄 **Evidencia:** [Enlace al PDF del cálculo FLSM](./src/reporte_FLSM_10.4.67.0_160826033200.pdf)
-
----
-
-## 📸 Evidencias de Funcionamiento
-
-- **Topología General:**
-  ![Topología Final](./img/topologia_final.png) _(Reemplazar con la captura de toda la red)_
-- **Comprobación VTP y VLANs:**
-  ![Show VLAN](./img/show_vlan.png) _(Reemplazar con captura de `show vlan brief` en SW1)_
-- **Redundancia LACP/PAgP:**
-  ![Etherchannel](./img/etherchannel.png) _(Reemplazar con captura de `show etherchannel summary`)_
-- **Enrutamiento EIGRP:**
-  ![EIGRP Routes](./img/eigrp_rutas.png) _(Reemplazar con captura de `show ip route` en MS1)_
-- **Asignación Dinámica (DHCP):**
-  ![DHCP Exitoso](./img/dhcp_successful.png) _(Reemplazar con captura de PC0 obteniendo IP)_
-- **Seguridad y ACLs:**
-  ![Pruebas Ping](./img/ping_acls.png) _(Reemplazar con la captura de los pings exitosos desde ADMIN y fallidos hacia ADMIN)_
-
----
-
 ## 💻 BITÁCORA TÉCNICA: Comandos de Configuración
 
 ### Fase 2 - Capa 2 (Switching y Redundancia)
