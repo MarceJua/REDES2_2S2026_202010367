@@ -23,7 +23,8 @@ El presente documento detalla el diseño, configuración e implementación de la
 
 Se implementó segmentación por VLANs, redundancia de enlaces con LACP y PAgP, enrutamiento dinámico mediante EIGRP y políticas estrictas de seguridad interdepartamental mediante Listas de Control de Acceso (ACLs).
 
-![Topología Final](./img/topologia_final.png)
+<img width="1720" height="949" alt="topologia_general" src="https://github.com/user-attachments/assets/f381e220-b744-4de8-988e-968d60b503b3" />
+
 _Figura 1: Vista física y lógica de la topología Chapin Red interconectando los cuatro edificios._
 
 ---
@@ -72,7 +73,8 @@ Para mantener la consistencia en la base de datos de VLANs a través de la red, 
 - **Modo VTP Resto de Switches:** `Client`
 - **Modo VTP MS6 (Admin):** `Transparent` (Para aislar el tráfico de la VLAN 99).
 
-> ![VLANs Propagadas](./img/show_vlan.png)
+<img width="879" height="486" alt="show_vlan" src="https://github.com/user-attachments/assets/9f6c7fc9-d8c2-416f-ab03-b564a14d8101" />
+
 > _Figura 1: Comprobación de VLANs propagadas exitosamente mediante VTP._
 
 ### 2.2 Agregación de Enlaces (EtherChannel) y STP
@@ -83,7 +85,8 @@ Para garantizar la alta disponibilidad y evitar cuellos de botella, se configura
 - **Edificio Derecho:** 3 enlaces físicos agrupados utilizando el protocolo propietario de Cisco **PAgP** en modo `desirable`.
 - Se habilitó `spanning-tree portfast` en todos los puertos de acceso finales para transiciones rápidas al estado de reenvío.
 
-> ![Estado EtherChannel](./img/etherchannel.png)
+<img width="874" height="546" alt="etherchannel" src="https://github.com/user-attachments/assets/fc9633ae-3ce2-4d3c-b9c2-4caa0d2b156f" />
+
 > _Figura 2: Verificación del estado de los Port-Channels (LACP y PAgP)._
 
 ---
@@ -94,7 +97,8 @@ Para garantizar la alta disponibilidad y evitar cuellos de botella, se configura
 
 Se configuró el protocolo **EIGRP** (Sistema Autónomo 10) debido a la terminación impar del número de carné. Este protocolo se encargó de enrutar el tráfico entre las SVIs y los enlaces punto a punto de la red MAN.
 
-> ![Tabla de Enrutamiento](./img/eigrp_rutas.png)
+<img width="893" height="714" alt="eigrp_rutas" src="https://github.com/user-attachments/assets/0d0a91f9-95bf-4dcf-bd61-81961c801bc4" />
+
 > _Figura 3: Tabla de enrutamiento mostrando las rutas aprendidas vía EIGRP (D)._
 
 ### 3.2 Servicio DHCP y DHCP Relay
@@ -105,7 +109,8 @@ Se configuraron dos servidores centralizados conectados a MS1:
 - **DHCP2:** Atiende las solicitudes de las VLANs 30 y 40.
   Dado que los servidores se encuentran en una subred distinta a las computadoras, se configuró el comando `ip helper-address` en las interfaces virtuales (SVI) de los switches Core (MS7, MS2 y MS6) para retransmitir las peticiones por broadcast como paquetes unicast.
 
-> ![Asignación DHCP](./img/dhcp_successful.png)
+<img width="890" height="347" alt="dhcp_successful" src="https://github.com/user-attachments/assets/5949af9a-83a4-4357-8f48-2c9c24faffcc" />
+
 > _Figura 4: Dispositivo final obteniendo configuración IPv4 exitosamente._
 
 ---
@@ -120,7 +125,8 @@ Para cumplir con las restricciones de comunicación interdepartamental, se dise�
 2.  **Comunicación Intradepartamental:** Las reglas `permit` aseguran que las VLANs del mismo color puedan comunicarse entre los diferentes edificios.
 3.  **Tráfico Unidireccional (VLAN ADMIN):** Para garantizar que el departamento de Administración (VLAN 99) inicie conexiones sin ser interrumpido, pero bloqueando el acceso hacia él, se utilizaron sentencias granulares `permit icmp echo-reply` y `permit tcp established` en las VLANs Naranja y Verde. Esto permite la _respuesta_ a los paquetes de ADMIN, pero deniega el _inicio_ de sesión.
 
-> ![Pruebas Ping ACL](./img/ping_acls.png)
+<img width="1446" height="537" alt="ping_acls" src="https://github.com/user-attachments/assets/9eac6fab-f1e2-41ac-8a67-8343bb10d1f6" />
+
 > _Figura 5: Resultados de paquetes ICMP demostrando el bloqueo exitoso según las políticas._
 
 ---
